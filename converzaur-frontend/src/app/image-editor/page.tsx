@@ -1,34 +1,45 @@
-'use client'
-import { useState, useRef } from "react";
+'use client';
+import React, { useState, useRef, ChangeEvent } from "react";
+
+interface CropDimensions {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
 export default function ImageEditorPage() {
-  const [image, setImage] = useState(null);
-  const [editedImage, setEditedImage] = useState(null);
-  const [cropDimensions, setCropDimensions] = useState({ x: 0, y: 0, width: 0, height: 0 });
-  const [rotation, setRotation] = useState(0);
-  const canvasRef = useRef(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [editedImage, setEditedImage] = useState<string | null>(null);
+  const [cropDimensions, setCropDimensions] = useState<CropDimensions>({ x: 0, y: 0, width: 0, height: 0 });
+  const [rotation, setRotation] = useState<number>(0);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
-        drawImageOnCanvas(reader.result); // Load image on canvas automatically
+        if (typeof reader.result === "string") {
+          setImage(reader.result);
+          drawImageOnCanvas(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const drawImageOnCanvas = (imgSrc) => {
+  const drawImageOnCanvas = (imgSrc: string) => {
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
+      if (!ctx) return;
+
       const img = new Image();
       img.src = imgSrc;
       img.onload = () => {
-        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
         ctx.save();
-        ctx.translate(canvasRef.current.width / 2, canvasRef.current.height / 2);
+        ctx.translate(canvasRef.current!.width / 2, canvasRef.current!.height / 2);
         ctx.rotate((rotation * Math.PI) / 180);
         ctx.drawImage(img, -img.width / 2, -img.height / 2); // Centered drawing
         ctx.restore();
@@ -39,24 +50,32 @@ export default function ImageEditorPage() {
   const cropImage = () => {
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
-      const imageData = ctx.getImageData(cropDimensions.x, cropDimensions.y, cropDimensions.width, cropDimensions.height);
+      if (!ctx) return;
+
+      const { x, y, width, height } = cropDimensions;
+      const imageData = ctx.getImageData(x, y, width, height);
+
       const newCanvas = document.createElement("canvas");
-      newCanvas.width = cropDimensions.width;
-      newCanvas.height = cropDimensions.height;
+      newCanvas.width = width;
+      newCanvas.height = height;
       const newCtx = newCanvas.getContext("2d");
-      newCtx.putImageData(imageData, 0, 0);
-      setEditedImage(newCanvas.toDataURL());
+
+      if (newCtx) {
+        newCtx.putImageData(imageData, 0, 0);
+        setEditedImage(newCanvas.toDataURL());
+      }
     }
   };
 
-  const handleCropInputChange = (e) => {
+  const handleCropInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setCropDimensions((prev) => ({ ...prev, [name]: parseInt(value, 10) }));
+    setCropDimensions((prev) => ({ ...prev, [name]: parseInt(value, 10) || 0 }));
   };
 
-  const handleRotateChange = (e) => {
-    setRotation(Number(e.target.value));
-    drawImageOnCanvas(image);
+  const handleRotateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const rotationValue = parseInt(e.target.value, 10) || 0;
+    setRotation(rotationValue);
+    if (image) drawImageOnCanvas(image);
   };
 
   return (

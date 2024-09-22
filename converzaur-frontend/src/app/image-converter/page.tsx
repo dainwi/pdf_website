@@ -1,19 +1,21 @@
-'use client'
-import { useState } from "react";
+'use client';
+import React, { useState, ChangeEvent } from "react";
 
 export default function ImageConverterPage() {
-  const [image, setImage] = useState(null);
-  const [convertedImage, setConvertedImage] = useState(null);
-  const [format, setFormat] = useState("image/png");
-  const [isConverting, setIsConverting] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [image, setImage] = useState<string | null>(null);
+  const [convertedImage, setConvertedImage] = useState<string | null>(null);
+  const [format, setFormat] = useState<string>("image/png");
+  const [isConverting, setIsConverting] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
+        if (typeof reader.result === "string") {
+          setImage(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -33,25 +35,32 @@ export default function ImageConverterPage() {
       canvas.width = img.width;
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      const interval = setInterval(() => {
-        setProgress((oldProgress) => {
-          if (oldProgress >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return oldProgress + 20; // Increment progress
-        });
-      }, 1000); // Update every second
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      setTimeout(() => {
-        const newImageData = canvas.toDataURL(format);
-        setConvertedImage(newImageData);
+        const interval = setInterval(() => {
+          setProgress((oldProgress) => {
+            if (oldProgress >= 100) {
+              clearInterval(interval);
+              return 100;
+            }
+            return oldProgress + 20; // Increment progress
+          });
+        }, 1000); // Update every second
+
+        setTimeout(() => {
+          const newImageData = canvas.toDataURL(format);
+          setConvertedImage(newImageData);
+          setIsConverting(false);
+          setProgress(100);
+          clearInterval(interval);
+        }, 5000); // Ensure the process takes at least 5 seconds
+      } else {
+        // Handle the error case where `getContext` might be null
         setIsConverting(false);
-        setProgress(0);
-        clearInterval(interval);
-      }, 5000); // Ensure the process takes at least 5 seconds
+        alert("Failed to create a canvas context for conversion.");
+      }
     };
   };
 
