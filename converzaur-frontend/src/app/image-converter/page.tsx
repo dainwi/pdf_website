@@ -8,7 +8,7 @@ export default function ImageConverterPage() {
   const [isConverting, setIsConverting] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: any) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
