@@ -45,7 +45,7 @@ export default function page() {
 }
 
 // Reuse the ToolCard component
-function ToolCard({ title, description, icon, link }) {
+function ToolCard({ title, description, icon, link }: { title: string, description: string, icon: any, link: string}) {
   return (
     <div className="bg-background rounded-lg shadow-md overflow-hidden">
       <div className="p-6">
