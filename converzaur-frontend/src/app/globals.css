@@ -67,3 +67,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+button:focus,
+a:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}

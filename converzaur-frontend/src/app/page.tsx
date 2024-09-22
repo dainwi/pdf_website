@@ -1,5 +1,5 @@
 import Hero from "@/components/Hero";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 import { Montserrat } from "next/font/google";
 
 const monto = Montserrat({
@@ -11,7 +11,7 @@ const monto = Montserrat({
 export default function Home() {
   return (
     <main className={`${monto.variable} font-monto mx-auto w-full min-h-screen overflow-hidden`}>
-      <Navbar />
+
       <Hero />
     </main>
   );
