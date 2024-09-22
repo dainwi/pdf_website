@@ -2,25 +2,27 @@
 import { useState } from "react";
 
 export default function ImageResizerPage() {
-  const [image, setImage] = useState(null);
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
-  const [originalDimensions, setOriginalDimensions] = useState(null);
-  const [resizedImage, setResizedImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [width, setWidth] = useState<string>("");
+  const [height, setHeight] = useState<string>("");
+  const [originalDimensions, setOriginalDimensions] = useState<{ width: number; height: number } | null>(null);
+  const [resizedImage, setResizedImage] = useState<string | null>(null);
 
-  const handleImageChange = (event: any) => {
-    const file = event.target.files[0];
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
+        const result = reader.result as string;
+        setImage(result);
+
         // Create an image object to get dimensions
         const img = new Image();
-        img.src = reader.result;
+        img.src = result;
         img.onload = () => {
           setOriginalDimensions({ width: img.width, height: img.height });
-          setWidth(img.width);  // Set default width
-          setHeight(img.height); // Set default height
+          setWidth(img.width.toString());   // Set default width
+          setHeight(img.height.toString()); // Set default height
         };
       };
       reader.readAsDataURL(file);
@@ -34,11 +36,13 @@ export default function ImageResizerPage() {
     img.src = image;
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      canvas.width = parseInt(width);
-      canvas.height = parseInt(height);
+      canvas.width = parseInt(width, 10);
+      canvas.height = parseInt(height, 10);
       const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      setResizedImage(canvas.toDataURL());
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        setResizedImage(canvas.toDataURL());
+      }
     };
   };
 

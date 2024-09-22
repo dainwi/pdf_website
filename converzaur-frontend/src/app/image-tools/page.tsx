@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function ImageToolsPage() {
   return (
@@ -41,10 +41,17 @@ export default function ImageToolsPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
-function ToolCard({ title, description, icon, link }) {
+type ToolCardProps = {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  link: string;
+};
+
+function ToolCard({ title, description, icon, link }: ToolCardProps) {
   return (
     <div className="bg-background rounded-lg shadow-md overflow-hidden">
       <div className="p-6">
@@ -62,19 +69,22 @@ function ToolCard({ title, description, icon, link }) {
         </Link>
       </div>
     </div>
-  )
+  );
 }
 
-// Define your icons here (placeholders for the example)
-function ImageResizeIcon(props: any) {
-  return <svg {...props} /* SVG Code */ />;
+// Define your icons here
+function ImageResizeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return <svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M..."/></svg>;
 }
-function ImageEditIcon(props: any) {
-  return <svg {...props} /* SVG Code */ />;
+
+function ImageEditIcon(props: React.SVGProps<SVGSVGElement>) {
+  return <svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M..."/></svg>;
 }
-function ImageConvertIcon(props: any) {
-  return <svg {...props} /* SVG Code */ />;
+
+function ImageConvertIcon(props: React.SVGProps<SVGSVGElement>) {
+  return <svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M..."/></svg>;
 }
-function ImageCompressIcon(props: any) {
-  return <svg {...props} /* SVG Code */ />;
+
+function ImageCompressIcon(props: React.SVGProps<SVGSVGElement>) {
+  return <svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M..."/></svg>;
 }
