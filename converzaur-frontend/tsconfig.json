@@ -1,35 +1,45 @@
 {
-    "compilerOptions": {
-      "target": "es2020",                      // Target ECMAScript version
-      "lib": ["dom", "dom.iterable", "esnext"], // Include DOM and latest ECMAScript library features
-      "allowJs": true,                         // Allow JavaScript files
-      "skipLibCheck": true,                    // Skip type checking of declaration files for faster builds
-      "strict": true,                          // Enable all strict type-checking options
-      "noImplicitAny": true,                   // Raise error on expressions with an implied 'any' type
-      "noImplicitThis": true,                  // Raise error on 'this' expressions with an implied 'any' type
-      "alwaysStrict": true,                    // Parse in strict mode and emit "use strict" for each source file
-      "esModuleInterop": true,                 // Enable interoperability between CommonJS and ES Modules
-      "module": "esnext",                      // Use ESNext module system
-      "moduleResolution": "node",              // Resolve modules as Node does
-      "resolveJsonModule": true,               // Allow importing .json files
-      "isolatedModules": true,                 // Ensure each file can be safely transpiled without relying on other imports
-      "jsx": "preserve",                       // Preserve JSX as-is (Next.js handles transformation)
-      "incremental": true,                     // Enable incremental compilation for faster rebuilds
-      "noEmit": true,                          // Don't emit output files; useful in a Next.js project
-
-      "paths": {
-        "@/*": ["./src/*"]                     // Set up path alias for cleaner imports
-      }
+  "compilerOptions": {
+    "target": "es2020", // Target ECMAScript version
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // Include DOM and latest ECMAScript library features
+    "allowJs": true, // Allow JavaScript files
+    "skipLibCheck": true, // Skip type checking of declaration files for faster builds
+    "strict": true, // Enable all strict type-checking options
+    "noImplicitAny": true, // Raise error on expressions with an implied 'any' type
+    "noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type
+    "alwaysStrict": true, // Parse in strict mode and emit "use strict" for each source file
+    "esModuleInterop": true, // Enable interoperability between CommonJS and ES Modules
+    "module": "esnext", // Use ESNext module system
+    "moduleResolution": "node", // Resolve modules as Node does
+    "resolveJsonModule": true, // Allow importing .json files
+    "isolatedModules": true, // Ensure each file can be safely transpiled without relying on other imports
+    "jsx": "preserve", // Preserve JSX as-is (Next.js handles transformation)
+    "incremental": true, // Enable incremental compilation for faster rebuilds
+    "noEmit": true, // Don't emit output files; useful in a Next.js project
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ] // Set up path alias for cleaner imports
     },
-    "include": [
-      "next-env.d.ts",                          // Include Next.js environment types
-      "**/*.ts",                                // Include all .ts files
-      "**/*.tsx",                               // Include all .tsx files
-      ".next/types/**/*.ts"                     // Include Next.js types
-    ],
-    "exclude": [
-      "node_modules",                           // Exclude node_modules
-      ".next",                                  // Exclude Next.js build output
-      "out"                                     // Exclude build directory if you use `next export`
+    "plugins": [
+      {
+        "name": "next"
+      }
     ]
-  }
+  },
+  "include": [
+    "next-env.d.ts", // Include Next.js environment types
+    "**/*.ts", // Include all .ts files
+    "**/*.tsx", // Include all .tsx files
+    ".next/types/**/*.ts" // Include Next.js types
+  ],
+  "exclude": [
+    "node_modules", // Exclude node_modules
+    ".next", // Exclude Next.js build output
+    "out" // Exclude build directory if you use `next export`
+  ]
+}
