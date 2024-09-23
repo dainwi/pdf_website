@@ -24,7 +24,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
-              <span className="text-2xl font-bold text-rose-900">Converzaur</span>
+              <span className="text-2xl font-bold">Converzaur</span>
             </Link>
           </div>
           <div className="hidden md:block">
@@ -74,10 +74,12 @@ export default function Navbar() {
             </div>
           </div>
           <div className="hidden md:block">
+            <Link href='/login'>
             <Button variant="outline" size="sm">
               <User className="w-4 h-4 mr-2" />
               Account
             </Button>
+            </Link>
           </div>
 
 
